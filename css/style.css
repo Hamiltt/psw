@@ -1,0 +1,285 @@
+:root{
+  --background: linear-gradient(180deg, #e6f0ff 0%, #ffffff 100%);
+  --card: #ffffff;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --accent-2: #06b6d4;
+  --text: #0f172a;
+  --danger: #ef4444;
+  --glass: rgba(255,255,255,0.6);
+  --radius: 12px;
+  --shadow: 0 6px 18px rgba(16,24,40,0.08);
+  font-family: "Roboto", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Dark theme variables applied when body.dark is present */
+body.dark {
+  --background: linear-gradient(180deg,#071428 0%, #0b1220 100%);
+  --card: rgba(255,255,255,0.04);
+  --muted: #9aa4b2;
+  --accent: #60a5fa;
+  --accent-2: #22d3ee;
+  --text: #e6eef8;
+  --glass: rgba(255,255,255,0.03);
+  --shadow: 0 6px 20px rgba(2,6,23,0.6);
+}
+
+body.dark #specialtySearch {
+  background: rgba(32, 64, 110, 0.18); /* мягкий голубой/индиго, прозрачный */
+  color: var(--text);
+  box-shadow: none; /* уменьшить/убрать яркие тени в dark */
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* Плейсхолдер в тёмной теме — чуть светлее */
+body.dark #specialtySearch::placeholder {
+  color: rgba(230,238,248,0.65);
+}
+
+body.dark .course-btn {
+  background: rgba(255,255,255,0.03);
+  color: var(--text);
+  box-shadow: none;
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+body.dark .course-btn:hover {
+  transform: translateY(-3px);
+  background: rgba(96,165,250,0.08); /* легкий голубой при hover */
+}
+
+body.dark .course-btn.active {
+  background: linear-gradient(180deg, rgba(96,165,250,0.18), rgba(34,211,238,0.12));
+  color: white;
+  box-shadow: 0 8px 20px rgba(34,211,238,0.06);
+}
+
+/* Для визуального баланса уменьшение контраста у карточек в dark */
+body.dark .card {
+  background: rgba(255,255,255,0.02);
+  box-shadow: 0 8px 20px rgba(2,6,23,0.45);
+}
+
+/* Уберём фон вокруг иконки переключателя темы (если вдруг) */
+.theme-toggle-btn {
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 4px;
+}
+
+/* Иконка переключателя — немного меньше в темной теме */
+body.dark .theme-toggle-btn img {
+  filter: none;
+}
+
+* { box-sizing: border-box; }
+html,body,#app { height: 100%; margin: 0; padding: 0; }
+
+/* Используем CSS-переменную --background */
+body {
+  background: var(--background);
+  color: var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* container */
+.app {
+  max-width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header */
+.header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 12px 16px;
+  gap: 12px;
+  background: transparent;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+/* Новый стиль кнопки темы */
+.theme-toggle-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-toggle-btn img {
+  width: 28px;   /* задайте размер вашей иконки */
+  height: 28px;
+  display: block;
+}
+
+.title { text-align: center; flex: 1; }
+.title h1 { margin:0; font-size:18px; font-weight:700; }
+.subtitle { margin:0; font-size:12px; color:var(--muted); }
+
+/* Icon button */
+.icon-btn{ background:var(--card); border:0; padding:6px 10px; border-radius:10px; box-shadow:var(--shadow); cursor:pointer; font-size:16px; }
+.icon-btn:active{ transform:scale(.98); }
+
+/* Progress / screens / cards — остальной CSS без изменений */
+.wizard-progress{ padding:8px 16px; display:flex; align-items:center; gap:12px; }
+.progress-bar{ flex:1; height:8px; background: rgba(0,0,0,0.06); border-radius:8px; overflow:hidden; }
+.progress-fill{ width:0%; height:100%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); transition:width .35s ease; }
+.step-text{ font-size:13px; color:var(--muted); }
+
+.screens{ flex:1; padding:16px; display:flex; align-items:flex-start; justify-content:center; }
+.screen{ width:100%; max-width:700px; display:none; opacity:0; transform:translateY(6px); transition:opacity .35s ease, transform .35s ease; }
+.screen.active{ display:block; opacity:1; transform:translateY(0); }
+
+.screen-title{ margin:8px 0 16px; font-size:20px; }
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  width: 100%;
+  padding: 6px 4px;
+
+  /* ключевые строки: заставляем все строки грид-а одинаково растягиваться */
+  align-items: stretch;       /* растянуть содержимое по вертикали */
+  justify-items: stretch;     /* растянуть карточки по ширине ячейки */
+  grid-auto-rows: 1fr;        /* все строки одинаковой высоты (1fr) */
+}
+
+/* карточка занимает всю ширину своей grid-ячейки */
+.card {
+  width: 100%;
+  height: 100%;              /* <-- важно: заполняет ячейку грид */
+  box-sizing: border-box;
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 14px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform .18s ease, box-shadow .18s ease;
+  /* убираем фиксированный min-height, он больше не нужен:
+     min-height: 88px;  -- удалить или прокомментировать, если есть */
+}
+
+/* hover: немного поднимем элемент, но без scale, чтобы не выходить за границы ячейки */
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 32px rgba(16,24,40,0.12);
+}
+
+/* фиксированный контейнер для иконки; иконка подстраивается под него */
+.card .icon {
+  width: 56px;
+  height: 56px;
+  flex: 0 0 56px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: transparent;
+}
+
+/* картинка заполняет контейнер, сохраняя пропорции */
+.card .icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  background: transparent;
+}
+
+/* мета-область занимает оставшуюся ширину ячейки */
+.card .meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;       /* колонка: заголовок сверху, подпись внизу */
+  justify-content: space-between; /* распределяем элементы так, чтобы высота карточки использовалась */
+}
+
+/* При желании подпись всегда внизу */
+.card .meta .desc {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  align-self: flex-start;
+}
+
+/* при отсутствии img можно стилизовать отдельно: */
+.card.no-img .icon {
+  background: linear-gradient(180deg,var(--accent),var(--accent-2));
+  color: white;
+}
+
+/* courses */
+.courses-grid{ display:flex; gap:12px; flex-wrap:wrap; justify-content:center; }
+.course-btn{
+  min-width:72px;
+  padding:14px 20px;
+  border-radius:14px;
+  font-size:18px;
+  font-weight:700;
+  border:0;
+  background:var(--card);
+  box-shadow:var(--shadow);
+  cursor:pointer;
+  transition: transform .12s, background-color .12s;
+}
+.course-btn:hover{ transform:scale(1.02); }
+.course-btn.active{ background: linear-gradient(180deg,var(--accent),var(--accent-2)); color:white; transform:translateY(-4px); }
+
+/* specialties */
+.search-wrap{ margin-bottom:10px; }
+#specialtySearch{ width:100%; padding:12px; border-radius:12px; border:0; box-shadow:var(--shadow); }
+.cards-list{ display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
+.special-card{ background:var(--card); padding:12px; border-radius:12px; box-shadow:var(--shadow); cursor:pointer; transition:transform .12s; }
+.special-card:hover{ transform:translateY(-6px); }
+.special-title{ font-weight:600; }
+.special-sub{ font-size:13px; color:var(--muted); margin-top:6px; }
+
+/* schedule */
+.schedule-container{ margin-top:12px; min-height:320px; background:var(--glass); padding:12px; border-radius:12px; box-shadow:var(--shadow); }
+.loader{ display:flex; flex-direction:column; align-items:center; gap:10px; padding:36px 12px; }
+.hidden{ display:none !important; }
+.spinner{ width:48px; height:48px; border-radius:50%; border:5px solid rgba(0,0,0,0.08); border-top-color:var(--accent); animation:spin 1s linear infinite; }
+@keyframes spin{ to { transform: rotate(360deg); } }
+
+.error-box, .not-available { padding:24px; text-align:center; }
+.error-box p, .not-available p{ font-weight:500; color:var(--muted); }
+
+.error-actions{ display:flex; gap:10px; justify-content:center; margin-top:12px; }
+
+.content-box{ display:flex; flex-direction:column; gap:8px; }
+.content-toolbar{ display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.raw-link{ font-size:13px; color:var(--muted); text-decoration:underline; }
+
+.viewer-wrap{ background:var(--card); border-radius:10px; padding:8px; min-height:360px; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+.viewer{ width:100%; height:100%; min-height:420px; border-radius:8px; }
+.viewer-img{ max-width:100%; max-height:72vh; object-fit:contain; transition: transform .17s ease; }
+
+.zoom-controls{ display:flex; gap:8px; align-items:center; }
+.zoom-controls .icon-btn{ padding:6px 10px; border-radius:8px; }
+
+.footer{ display:flex; justify-content:space-between; padding:12px 16px; position:sticky; bottom:0; background:transparent; gap:12px; }
+.btn{ padding:10px 14px; border-radius:12px; border:0; background:var(--accent); color:white; cursor:pointer; box-shadow:var(--shadow); font-weight:600; }
+.btn.ghost{ background:transparent; color:var(--text); border:1px solid rgba(0,0,0,0.06); }
+.btn.small{ padding:6px 8px; font-size:14px; }
+
+@media (max-width:640px){
+  .card{ padding:10px; }
+  .courses-grid{ gap:10px; }
+  .viewer{ min-height:320px; }
+}
