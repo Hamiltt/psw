@@ -1,9 +1,3 @@
-// js/script.js — обновлённый код
-// Основные изменения:
-// - Тема управляется ТОЛЬКО переключателем, удалена зависимость от Telegram themeParams
-// - Иконки факультетов: пробуем mapping, затем автогенерируем имена с расширениями и пытаемся последовательно
-// - PDF: если файл pdf -> preview iframe; если docx -> Google Docs Viewer (пользователь может сохранить в PDF)
-
 // ==== Инициализация Telegram WebApp (оставляем SDK, но не используем themeParams) ====
 const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
 if (tg && typeof tg.init === 'function') {
@@ -55,7 +49,6 @@ function setZoom(z){
 zoomInBtn?.addEventListener('click', ()=> setZoom(currentZoom + 0.1));
 zoomOutBtn?.addEventListener('click', ()=> setZoom(currentZoom - 0.1));
 
-// ==== Данные ====
 const faculties = [
   "Факультет информационных технологий",
   "Инженерно строительный факультет",
@@ -67,7 +60,6 @@ const faculties = [
 ];
 const courses = [1,2,3,4];
 
-// specialtiesMap — как ранее (пример)
 const specialtiesMap = {
   "факультет_информационных_технологий_1": [
     "Программная инженерия",
@@ -75,19 +67,21 @@ const specialtiesMap = {
     "Data Science",
     "Информационные системы"
   ],
-  "факультет_информационных_технологий_2": ["Программная инженерия","Кибербезопасность","Сетевые технологии"],
-  "финансово_экономический_факультет_2": ["Финансы","Маркетинг","Бухгалтерский учет","Экономика предприятий"],
-  "юридический_факультет_1": ["Гражданское право","Уголовное право","Международное право"]
+  "факультет_информационных_технологий_3": ["Программная инженерия","Кибербезопасность","Сетевые технологии"],
+  "финансово_экономический_факультет_2": ["Социальные коммуникации","Маркетинг","Бухгалтерский учет","Экономика предприятий"],
+  "юридический_факультет_1": ["Гражданское право","Уголовное право","Международное право"],
+  "инженерно_строительный_факультет_2": ["Дизайн предметно-пространственной среды"]
   // ... дополняйте
 };
 
 // scheduleLinks: подставьте реальные ссылки
 const scheduleLinks = {
-  "факультет_информационных_технологий_1_программная_инженерия": "https://docs.google.com/document/d/1kb5gcNAH-vo0WnTxJuxG5DA8FP-BY2Xu/edit?usp=drive_link&ouid=106700637848956961460&rtpof=true&sd=true"
+  "факультет_информационных_технологий_1_программная_инженерия": "https://docs.google.com/document/d/1kb5gcNAH-vo0WnTxJuxG5DA8FP-BY2Xu/edit?usp=drive_link&ouid=106700637848956961460&rtpof=true&sd=true",
+  "факультет_информационных_технологий_3_программная_инженерия": "https://docs.google.com/document/d/1-NBApyYvFZkhi31W2xnogE3HdHcj-hYc/edit?usp=drive_link&ouid=106700637848956961460&rtpof=true&sd=true",
+  "финансово_экономический_факультет_2_социальные_коммуникации": "https://docs.google.com/document/d/1ytLK-J0r9pAcYJhdDn2uHNSkMa4Zhno-/edit?usp=drive_link&ouid=106700637848956961460&rtpof=true&sd=true",
+  "инженерно_строительный_факультет_2_дизайн_предметно-пространственной_среды": "https://docs.google.com/document/d/1tKU3oDJZ2bPDzIFLWB-GWm9JyhGInywC/edit?usp=drive_link&ouid=106700637848956961460&rtpof=true&sd=true"
 };
 
-// Пример простого mapping: ключ — точное название факультета (как в массиве faculties),
-// значение — имя файла, который лежит в папке img/ (png/jpg/jpeg/webp допустимы).
 const facultyImages = {
   "Факультет информационных технологий": "FIT.png",
   "Инженерно строительный факультет": "ISF.png",
@@ -97,7 +91,6 @@ const facultyImages = {
   "Финансово экономический факультет": "FEF.png",
   "Механико-технологический факультет": "mtf.png"
 };
-
 
 // ==== Вспомогательные функции ====
 function normalizeKey(str){
